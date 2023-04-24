@@ -1,0 +1,9 @@
+name: Deploy stream to dev and prod
+on: push
+
+jobs:
+  jar-app:
+    uses: navikt/teamsykmelding-github-actions-workflows/.github/workflows/jar-app.yaml@main
+    secrets: inherit
+    with:
+      app: syfosmoppgave-stream
