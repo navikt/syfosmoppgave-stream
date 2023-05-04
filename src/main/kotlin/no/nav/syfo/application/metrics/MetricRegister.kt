@@ -2,7 +2,7 @@ package no.nav.syfo.application.metrics
 
 import io.prometheus.client.Histogram
 
-const val METRICS_NS = "syfosmoppgave-stream"
+const val METRICS_NS = "syfosmoppgave_stream"
 
 val HTTP_HISTOGRAM: Histogram = Histogram.Builder()
     .namespace(METRICS_NS)
