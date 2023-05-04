@@ -1,11 +1,11 @@
 #  SYFO sm stream oppgave
-This project contains creating task to Gsak for the sykmelding2013 message
+This project contains creating task to Gsak for the sykmelding2013 message with kafka-streaming
 
 ## Technologies used
 * Kotlin
 * Ktor
 * Gradle
-* Kotest
+* Junit
 * Kafka
 
 #### Requirements

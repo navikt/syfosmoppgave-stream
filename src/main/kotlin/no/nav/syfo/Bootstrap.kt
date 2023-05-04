@@ -69,7 +69,9 @@ fun createAndStartKafkaStream(env: Environment, applicationState: ApplicationSta
             )
         },
         joinWindow,
-    ).to(env.privatRegistrerOppgave)
+    ).to(env.privatRegistrerOppgave).also {
+        log.info("Sendt event to kafka topic ${env.privatRegistrerOppgave}")
+    }
 
     val kafkaStream = KafkaStreams(streamBuilder.build(), streamProperties)
 

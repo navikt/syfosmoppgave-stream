@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.jackson.jackson
 import io.ktor.server.application.ApplicationCallPipeline
@@ -12,7 +11,6 @@ import io.ktor.server.application.install
 import io.ktor.server.engine.ApplicationEngine
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.server.plugins.callid.CallId
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
@@ -21,7 +19,6 @@ import no.nav.syfo.Environment
 import no.nav.syfo.application.api.registerNaisApi
 import no.nav.syfo.application.metrics.monitorHttpRequests
 import no.nav.syfo.log
-import java.util.UUID
 
 fun createApplicationEngine(
     env: Environment,
@@ -37,11 +34,6 @@ fun createApplicationEngine(
             }
         }
 
-        install(CallId) {
-            generate { UUID.randomUUID().toString() }
-            verify { callId: String -> callId.isNotEmpty() }
-            header(HttpHeaders.XCorrelationId)
-        }
         install(StatusPages) {
             exception<Throwable> { call, cause ->
                 log.error("Caught exception", cause)
