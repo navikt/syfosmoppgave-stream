@@ -19,7 +19,7 @@ val kotlinVersion = "1.8.21"
 
 plugins {
     id("org.jmailen.kotlinter") version "3.15.0"
-    kotlin("jvm") version "1.8.21"
+    kotlin("jvm") version "1.8.22"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
