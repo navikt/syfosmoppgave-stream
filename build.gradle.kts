@@ -14,7 +14,7 @@ val prometheusVersion = "0.16.0"
 val smCommonVersion = "1.0.1"
 val junitJupiterVersion = "5.9.3"
 val mockkVersion = "1.13.5"
-val kotlinVersion = "1.8.21"
+val kotlinVersion = "1.8.22"
 
 
 plugins {
