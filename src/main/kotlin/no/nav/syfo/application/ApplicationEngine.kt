@@ -41,8 +41,6 @@ fun createApplicationEngine(
             }
         }
 
-        routing {
-            registerNaisApi(applicationState)
-        }
+        routing { registerNaisApi(applicationState) }
         intercept(ApplicationCallPipeline.Monitoring, monitorHttpRequests())
     }

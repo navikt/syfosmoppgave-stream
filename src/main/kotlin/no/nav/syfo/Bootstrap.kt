@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.prometheus.client.hotspot.DefaultExports
+import java.time.Duration
 import no.nav.syfo.application.ApplicationServer
 import no.nav.syfo.application.ApplicationState
 import no.nav.syfo.application.createApplicationEngine
@@ -21,25 +22,26 @@ import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.JoinWindows
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.time.Duration
 
 val log: Logger = LoggerFactory.getLogger("no.nav.syfo.syfosmoppgave-stream")
 
-val objectMapper: ObjectMapper = ObjectMapper().apply {
-    registerKotlinModule()
-    registerModule(JavaTimeModule())
-    configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-    configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-}
+val objectMapper: ObjectMapper =
+    ObjectMapper().apply {
+        registerKotlinModule()
+        registerModule(JavaTimeModule())
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
+    }
 
 fun main() {
     val env = Environment()
     DefaultExports.initialize()
     val applicationState = ApplicationState()
-    val applicationEngine = createApplicationEngine(
-        env,
-        applicationState,
-    )
+    val applicationEngine =
+        createApplicationEngine(
+            env,
+            applicationState,
+        )
     createAndStartKafkaStream(env, applicationState)
 
     val applicationServer = ApplicationServer(applicationEngine, applicationState)
@@ -48,30 +50,38 @@ fun main() {
 
 fun createAndStartKafkaStream(env: Environment, applicationState: ApplicationState) {
     val streamBuilder = StreamsBuilder()
-    val streamProperties = KafkaUtils.getAivenKafkaConfig()
-        .toStreamsConfig(env.applicationName, Serdes.ByteArray()::class)
+    val streamProperties =
+        KafkaUtils.getAivenKafkaConfig()
+            .toStreamsConfig(env.applicationName, Serdes.ByteArray()::class)
     streamProperties[StreamsConfig.APPLICATION_ID_CONFIG] = env.applicationId
     val journalOpprettetStream =
-        streamBuilder.stream(env.oppgaveJournalOpprettet, Consumed.with(Serdes.String(), Serdes.ByteArray()))
+        streamBuilder.stream(
+            env.oppgaveJournalOpprettet,
+            Consumed.with(Serdes.String(), Serdes.ByteArray())
+        )
     val produserOppgaveStream =
-        streamBuilder.stream(env.oppgaveProduserOppgave, Consumed.with(Serdes.String(), Serdes.ByteArray()))
+        streamBuilder.stream(
+            env.oppgaveProduserOppgave,
+            Consumed.with(Serdes.String(), Serdes.ByteArray())
+        )
 
     val joinWindow = JoinWindows.ofTimeDifferenceWithNoGrace(Duration.ofDays(14))
 
-    journalOpprettetStream.join(
-        produserOppgaveStream,
-        { journalOpprettet, produserOppgave ->
-            objectMapper.writeValueAsBytes(
-                RegistrerOppgaveKafkaMessage(
-                    produserOppgave = objectMapper.readValue(produserOppgave),
-                    journalOpprettet = objectMapper.readValue(journalOpprettet),
-                ),
-            )
-        },
-        joinWindow,
-    ).to(env.privatRegistrerOppgave).also {
-        log.info("Sendt event to kafka topic ${env.privatRegistrerOppgave}")
-    }
+    journalOpprettetStream
+        .join(
+            produserOppgaveStream,
+            { journalOpprettet, produserOppgave ->
+                objectMapper.writeValueAsBytes(
+                    RegistrerOppgaveKafkaMessage(
+                        produserOppgave = objectMapper.readValue(produserOppgave),
+                        journalOpprettet = objectMapper.readValue(journalOpprettet),
+                    ),
+                )
+            },
+            joinWindow,
+        )
+        .to(env.privatRegistrerOppgave)
+        .also { log.info("Sendt event to kafka topic ${env.privatRegistrerOppgave}") }
 
     val kafkaStream = KafkaStreams(streamBuilder.build(), streamProperties)
 
