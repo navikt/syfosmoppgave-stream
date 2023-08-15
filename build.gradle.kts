@@ -13,7 +13,7 @@ val logbackVersion = "1.4.11"
 val prometheusVersion = "0.16.0"
 val smCommonVersion = "1.0.1"
 val junitJupiterVersion = "5.10.0"
-val mockkVersion = "1.13.5"
+val mockkVersion = "1.13.7"
 val kotlinVersion = "1.9.0"
 val ktfmtVersion = "0.44"
 
