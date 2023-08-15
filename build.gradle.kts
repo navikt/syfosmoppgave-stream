@@ -86,10 +86,6 @@ dependencies {
             }
         }
 
-        withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = "17"
-        }
-
         withType<Test> {
             useJUnitPlatform {
             }
