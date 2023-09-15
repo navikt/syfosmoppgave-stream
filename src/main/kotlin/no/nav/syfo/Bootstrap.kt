@@ -51,7 +51,7 @@ fun main() {
 fun createAndStartKafkaStream(env: Environment, applicationState: ApplicationState) {
     val streamBuilder = StreamsBuilder()
     val streamProperties =
-        KafkaUtils.getAivenKafkaConfig()
+        KafkaUtils.getAivenKafkaConfig("syfosmoppgave-stream")
             .toStreamsConfig(env.applicationName, Serdes.ByteArray()::class)
     streamProperties[StreamsConfig.APPLICATION_ID_CONFIG] = env.applicationId
     val journalOpprettetStream =
