@@ -13,7 +13,7 @@ val junitJupiterVersion = "5.10.0"
 val mockkVersion = "1.13.8"
 val kotlinVersion = "1.9.10"
 val ktfmtVersion = "0.44"
-
+val snappyJavaVersion = "1.1.10.5"
 
 plugins {
     id("application")
@@ -48,6 +48,11 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
     implementation("no.nav.helse:syfosm-common-kafka:$smCommonVersion")
+     constraints {
+        implementation("org.xerial.snappy:snappy-java:$snappyJavaVersion") {
+            because("override transient from org.apache.kafka:kafka_2.12")
+        }
+    }
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
