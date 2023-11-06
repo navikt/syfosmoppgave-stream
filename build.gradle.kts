@@ -8,17 +8,17 @@ val ktorVersion = "2.3.5"
 val logstashEncoderVersion = "7.4"
 val logbackVersion = "1.4.11"
 val prometheusVersion = "0.16.0"
-val smCommonVersion = "2.0.4"
-val junitJupiterVersion = "5.10.0"
+val smCommonVersion = "2.1.0-jdk"
+val junitJupiterVersion = "5.10.1"
 val mockkVersion = "1.13.8"
-val kotlinVersion = "1.9.10"
+val kotlinVersion = "1.9.20"
 val ktfmtVersion = "0.44"
 val snappyJavaVersion = "1.1.10.5"
 
 plugins {
     id("application")
     id("com.diffplug.spotless") version "6.22.0"
-    kotlin("jvm") version "1.9.10"
+    kotlin("jvm") version "1.9.20"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
