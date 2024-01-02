@@ -2,23 +2,23 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val coroutinesVersion = "1.7.3"
-val jacksonVersion = "2.16.0"
+val jacksonVersion = "2.16.1"
 val kafkaVersion = "3.6.1"
 val ktorVersion = "2.3.7"
 val logstashEncoderVersion = "7.4"
 val logbackVersion = "1.4.14"
 val prometheusVersion = "0.16.0"
-val smCommonVersion = "2.0.7"
+val smCommonVersion = "2.0.8"
 val junitJupiterVersion = "5.10.1"
 val mockkVersion = "1.13.8"
-val kotlinVersion = "1.9.21"
+val kotlinVersion = "1.9.22"
 val ktfmtVersion = "0.44"
 val snappyJavaVersion = "1.1.10.5"
 
 plugins {
     id("application")
     id("com.diffplug.spotless") version "6.23.3"
-    kotlin("jvm") version "1.9.21"
+    kotlin("jvm") version "1.9.22"
     id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
