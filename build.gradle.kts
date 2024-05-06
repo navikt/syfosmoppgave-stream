@@ -2,7 +2,7 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val coroutinesVersion = "1.8.0"
-val jacksonVersion = "2.17.0"
+val jacksonVersion = "2.17.1"
 val kafkaVersion = "3.7.0"
 val ktorVersion = "2.3.10"
 val logstashEncoderVersion = "7.4"
