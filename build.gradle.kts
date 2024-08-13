@@ -8,7 +8,6 @@ val ktorVersion = "2.3.12"
 val logstashEncoderVersion = "8.0"
 val logbackVersion = "1.5.6"
 val prometheusVersion = "0.16.0"
-val smCommonVersion = "2.0.8"
 val junitJupiterVersion = "5.10.3"
 val mockkVersion = "1.13.12"
 val kotlinVersion = "2.0.10"
@@ -47,12 +46,13 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
-    implementation("no.nav.helse:syfosm-common-kafka:$smCommonVersion")
-     constraints {
+    implementation("org.apache.kafka:kafka_2.12:$kafkaVersion")
+    constraints {
         implementation("org.xerial.snappy:snappy-java:$snappyJavaVersion") {
             because("override transient from org.apache.kafka:kafka_2.12")
         }
     }
+    implementation("org.apache.kafka:kafka-streams:$kafkaVersion")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
