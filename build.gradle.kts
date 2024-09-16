@@ -1,7 +1,7 @@
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val coroutinesVersion = "1.8.1"
+val coroutinesVersion = "1.9.0"
 val jacksonVersion = "2.17.2"
 val kafkaVersion = "3.8.0"
 val ktorVersion = "2.3.12"
@@ -12,13 +12,13 @@ val junitJupiterVersion = "5.11.0"
 val mockkVersion = "1.13.12"
 val kotlinVersion = "2.0.20"
 val ktfmtVersion = "0.44"
-val snappyJavaVersion = "1.1.10.6"
+val snappyJavaVersion = "1.1.10.7"
 
 plugins {
     id("application")
     id("com.diffplug.spotless") version "6.25.0"
     kotlin("jvm") version "2.0.20"
-    id("com.gradleup.shadow") version "8.3.0"
+    id("com.gradleup.shadow") version "8.3.1"
 }
 
 application {
