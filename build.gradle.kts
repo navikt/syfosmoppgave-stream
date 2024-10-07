@@ -8,7 +8,7 @@ val ktorVersion = "2.3.12"
 val logstashEncoderVersion = "8.0"
 val logbackVersion = "1.5.8"
 val prometheusVersion = "0.16.0"
-val junitJupiterVersion = "5.11.1"
+val junitJupiterVersion = "5.11.2"
 val mockkVersion = "1.13.12"
 val kotlinVersion = "2.0.20"
 val ktfmtVersion = "0.44"
@@ -18,7 +18,7 @@ plugins {
     id("application")
     id("com.diffplug.spotless") version "6.25.0"
     kotlin("jvm") version "2.0.20"
-    id("com.gradleup.shadow") version "8.3.2"
+    id("com.gradleup.shadow") version "8.3.3"
 }
 
 application {
