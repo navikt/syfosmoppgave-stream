@@ -1,24 +1,24 @@
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val coroutinesVersion = "1.10.1"
-val jacksonVersion = "2.18.3"
-val kafkaVersion = "3.9.0"
-val ktorVersion = "3.1.1"
-val logstashEncoderVersion = "8.0"
+val coroutinesVersion = "1.10.2"
+val jacksonVersion = "2.19.1"
+val kafkaVersion = "3.9.1"
+val ktorVersion = "3.2.1"
+val logstashEncoderVersion = "8.1"
 val logbackVersion = "1.5.18"
 val prometheusVersion = "0.16.0"
-val junitJupiterVersion = "5.12.1"
-val mockkVersion = "1.13.17"
-val kotlinVersion = "2.1.20"
+val junitJupiterVersion = "5.13.3"
+val mockkVersion = "1.14.4"
+val kotlinVersion = "2.2.0"
 val ktfmtVersion = "0.44"
 val snappyJavaVersion = "1.1.10.7"
 
 plugins {
     id("application")
-    id("com.diffplug.spotless") version "7.0.2"
-    kotlin("jvm") version "2.1.20"
-    id("com.gradleup.shadow") version "8.3.6"
+    id("com.diffplug.spotless") version "7.1.0"
+    kotlin("jvm") version "2.2.0"
+    id("com.gradleup.shadow") version "8.3.8"
 }
 
 application {
