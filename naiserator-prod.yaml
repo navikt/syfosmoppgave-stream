@@ -8,11 +8,8 @@ metadata:
 spec:
   image: {{ image }}
   replicas:
-    min: 2
-    max: 6
-    scalingStrategy:
-      cpu:
-        thresholdPercentage: 90
+    min: 3
+    max: 3
   port: 8080
   liveness:
     path: internal/is_alive
@@ -37,7 +34,7 @@ spec:
         - id: loki
   resources:
     limits:
-      memory: 1536Mi
+      memory: 2Gi
     requests:
       cpu: 200m
       memory: 1150Mi

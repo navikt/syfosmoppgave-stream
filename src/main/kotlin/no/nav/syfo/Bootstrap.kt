@@ -18,6 +18,7 @@ import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.StreamsConfig
+import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.JoinWindows
 import org.slf4j.Logger
@@ -86,27 +87,18 @@ fun createAndStartKafkaStream(env: Environment, applicationState: ApplicationSta
     val kafkaStream = KafkaStreams(streamBuilder.build(), streamProperties)
 
     kafkaStream.setUncaughtExceptionHandler { err ->
-        log.error("Caught exception in stream: ${err.message}", err)
-        closeStream(kafkaStream, applicationState)
-        throw err
+        log.error("Caught exception in stream, shutting down client: ${err.message}", err)
+        StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_CLIENT
     }
 
     kafkaStream.setStateListener { newState, oldState ->
         log.info("From state={} to state={}", oldState, newState)
-        if (newState == KafkaStreams.State.ERROR) {
-            closeStream(kafkaStream, applicationState)
+        if (newState == KafkaStreams.State.ERROR || newState == KafkaStreams.State.NOT_RUNNING) {
+            log.error("Stream stopped in state {}, marking application as not alive", newState)
+            applicationState.ready = false
+            applicationState.alive = false
         }
     }
 
     kafkaStream.start()
-}
-
-private fun closeStream(
-    kafkaStream: KafkaStreams,
-    applicationState: ApplicationState,
-) {
-    kafkaStream.close(Duration.ofSeconds(30))
-    log.error("Closing stream because it went into error state")
-    applicationState.ready = false
-    applicationState.alive = false
 }
