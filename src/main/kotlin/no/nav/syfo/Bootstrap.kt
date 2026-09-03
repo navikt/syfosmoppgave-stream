@@ -1,11 +1,5 @@
 package no.nav.syfo
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.prometheus.client.hotspot.DefaultExports
 import java.time.Duration
 import no.nav.syfo.application.ApplicationServer
@@ -23,26 +17,19 @@ import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.JoinWindows
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import tools.jackson.databind.json.JsonMapper
+import tools.jackson.module.kotlin.jacksonMapperBuilder
+import tools.jackson.module.kotlin.readValue
 
 val log: Logger = LoggerFactory.getLogger("no.nav.syfo.syfosmoppgave-stream")
 
-val objectMapper: ObjectMapper =
-    ObjectMapper().apply {
-        registerKotlinModule()
-        registerModule(JavaTimeModule())
-        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-    }
+private val jsonMapper: JsonMapper = jacksonMapperBuilder().build()
 
 fun main() {
     val env = Environment()
     DefaultExports.initialize()
     val applicationState = ApplicationState()
-    val applicationEngine =
-        createApplicationEngine(
-            env,
-            applicationState,
-        )
+    val applicationEngine = createApplicationEngine(env, applicationState)
     createAndStartKafkaStream(env, applicationState)
 
     val applicationServer = ApplicationServer(applicationEngine, applicationState)
@@ -58,12 +45,12 @@ fun createAndStartKafkaStream(env: Environment, applicationState: ApplicationSta
     val journalOpprettetStream =
         streamBuilder.stream(
             env.oppgaveJournalOpprettet,
-            Consumed.with(Serdes.String(), Serdes.ByteArray())
+            Consumed.with(Serdes.String(), Serdes.ByteArray()),
         )
     val produserOppgaveStream =
         streamBuilder.stream(
             env.oppgaveProduserOppgave,
-            Consumed.with(Serdes.String(), Serdes.ByteArray())
+            Consumed.with(Serdes.String(), Serdes.ByteArray()),
         )
 
     val joinWindow = JoinWindows.ofTimeDifferenceWithNoGrace(Duration.ofDays(14))
@@ -72,11 +59,11 @@ fun createAndStartKafkaStream(env: Environment, applicationState: ApplicationSta
         .join(
             produserOppgaveStream,
             { journalOpprettet, produserOppgave ->
-                objectMapper.writeValueAsBytes(
+                jsonMapper.writeValueAsBytes(
                     RegistrerOppgaveKafkaMessage(
-                        produserOppgave = objectMapper.readValue(produserOppgave),
-                        journalOpprettet = objectMapper.readValue(journalOpprettet),
-                    ),
+                        produserOppgave = jsonMapper.readValue(produserOppgave),
+                        journalOpprettet = jsonMapper.readValue(journalOpprettet),
+                    )
                 )
             },
             joinWindow,
