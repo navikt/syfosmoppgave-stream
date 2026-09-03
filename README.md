@@ -10,7 +10,7 @@ This project contains creating task to Gsak for the sykmelding2013 message with 
 
 #### Requirements
 
-* JDK 21
+* JDK 25
 
 ## Getting started
 #### Compile and package application
